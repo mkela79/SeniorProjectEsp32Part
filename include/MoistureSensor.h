@@ -1,0 +1,30 @@
+#ifndef MOISTURESENSOR_H
+#define MOISTURESENSOR_H
+
+#define MOISTURE_SENSOR_BAUDRATE 4800
+#define MOISTURE_SENSOR_TIMEOUT 500UL
+
+#include "Arduino.h"
+#include "SoftwareSerial.h"
+#include "CRC_16_MODBUS.h"
+
+const byte moist[] = {0x01, 0x03, 0x3C, 0x61, 0x05, 0x11, 0xDD, 0xA4};
+const byte temp[] = {0x01, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD5, 0xCA};
+const byte EC[] = {0x01, 0x03, 0x00, 0x02, 0x00, 0x01, 0x25, 0xCA};
+const byte PH[] = {0x01, 0x03, 0x00, 0x03, 0x00, 0x01, 0x74, 0x0A};
+const byte all[] = {0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0xC4, 0x0B};
+
+
+class MoistureSensor {
+    private:
+        SoftwareSerial* uart;
+        CRC_16_MODBUS crcCheck;
+        byte values[11];
+
+    public:
+        MoistureSensor(int tx, int rx);
+        void init();
+        uint16_t readSensorData();
+};
+
+#endif
